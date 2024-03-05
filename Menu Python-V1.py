@@ -1,6 +1,13 @@
-import sys, subprocess
+import sys
+import subprocess
+import json
 
-def voltar(): #Função voltar
+#Funções Globais
+
+def limpar_tela(): #Funçao limpar tela universal
+    subprocess.run(['cls' if sys.platform == 'win32' else 'clear'], shell=True)
+
+def voltar(dados_usuario): #Função voltar
     print()
     print('Caso deseje voltar a seleção do portal, digite "Voltar"')
     print()
@@ -12,32 +19,225 @@ def voltar(): #Função voltar
     voltar = str(voltar)
         
     if voltar.lower() == "voltar":
-        subprocess.run('cls', shell=True)
-        portal()
+        limpar_tela()
+        portal(dados_usuario)
     
     elif voltar.lower() == "logout":
-        subprocess.run('cls', shell=True)
-        menu()
+        limpar_tela()
+        checar_cadastro(dados_usuario)
         
     elif voltar.lower() == "sair":
-        subprocess.run('cls', shell=True)
-        print('Você saiu do programa')
+        limpar_tela()
         print()
+        print('Você saiu do programa')
+        
         exit()
         
     else:
+        print()
         print('Você não digitou uma das opções validas')
-        voltar()
+        voltar(dados_usuario)
 
-def validação(numero): #Função validar número inteiro
+def validar_numero(mensagem): #Confirma que so existam numeros em inputs numerais
     while True:
         try:
-            entrada = int(input(numero))
+            entrada = int(input(mensagem))
             return entrada
-        except ValueError:
-            print("Por favor, insira um número inteiro válido.")
 
-def portal(): #Função Portal
+        except ValueError:
+            limpar_tela()
+            print('')
+            print("Por favor, insira apenas números.")
+
+#Funções de Arquivo
+
+def salvar_dados_arquivo(nome_arquivo, dados): #Salva os dados em Json
+    try:
+        with open(nome_arquivo, 'r') as arquivo_existente:
+            dados_existente = json.load(arquivo_existente)
+    except FileNotFoundError:
+        dados_existente = {}
+
+    email = dados.get('E-mail', None)
+
+    if email is not None:
+        if email in dados_existente:
+            print(f'O e-mail {email} já possui um cadastro.')
+        else:
+            dados_existente[email] = dados
+            with open(nome_arquivo, 'w') as arquivo:
+                json.dump(dados_existente, arquivo, indent=2)
+                print(f'Cadastro do e-mail {email} salvo com sucesso.')
+
+def ler_dados(nome_arquivo): #Lê o json
+    try:
+        with open(nome_arquivo, 'r') as arquivo:
+            dados = json.load(arquivo)
+            return dados
+    except FileNotFoundError:
+        return {}
+
+def guardar_dados(nome_funcao, retorno, dados_usuario): #Manipula os dados para salvar em json
+    dados_usuario[nome_funcao] = retorno
+
+#Funções de Cadastro
+
+def checar_cadastro(dados_usuario):
+    print('')
+    print('|/////////////////////////|  SALESFORCE  |/////////////////////////|')
+    print('|/////////////|  Você já é um usuário Salesforce?  |///////////////|')
+    print('')
+    
+    possui_cadastro = input("Sim, Não:   ")
+
+    if possui_cadastro.lower() == "sim":
+        limpar_tela()
+        print('')
+        email = input("Seja bem-vindo. Por favor, indique seu e-mail:  ")
+        print('')
+        senha = input("Certo, agora digite sua senha:  ")
+
+        # Load existing user data from the file
+        dados_armazenados = ler_dados('cadastro_usuario.json')
+
+        if dados_armazenados and email in dados_armazenados:
+            if senha == dados_armazenados[email]['Senha']:
+                limpar_tela()
+                print('')
+                print('Login bem-sucedido!')
+                return dados_armazenados[email]
+            else:
+                limpar_tela()
+                print('')
+                print('E-mail ou senha incorretos. Tente novamente.')
+                return checar_cadastro(dados_usuario)
+        else:
+            limpar_tela()
+            print('')
+            print('Não há dados de cadastro encontrados para o e-mail informado. Realize o cadastro primeiro.')
+            return checar_cadastro(dados_usuario)
+
+    elif possui_cadastro.lower() == "nao":
+        limpar_tela()
+        return {}
+
+    else:
+        limpar_tela()
+        print('')
+        print("Para selecionar as opções, digite Sim ou Não")
+        return checar_cadastro(dados_usuario)
+
+def intencao_cadastro(dados_usuario): #Verifica se o usuario quer se cadastrar
+    limpar_tela()
+
+    print('')
+    print("Será necessário fazer seu cadastro. Você concorda em se cadastrar?")
+    intencao = input("Sim, Não?   ")
+    intencao = str(intencao)
+
+    limpar_tela()
+
+    if intencao.lower() == "sim":
+        limpar_tela()
+        reg_email(dados_usuario)
+
+    elif intencao.lower() == "nao":
+        limpar_tela()
+
+        print('')
+        print('Sem problemas, quando quiser, estaremos à disposição!')
+        print()
+        print('Você saiu do programa')
+        print()
+        exit()
+
+    else:
+        limpar_tela()
+
+        print('')
+        print("Para selecionar as opções, digite Sim ou Não")
+        intencao_cadastro()
+
+def reg_email(dados_usuario): #Recebe e verifica email
+    
+    print('')
+    email = input("Por favor, indique seu e-mail:  ")
+
+    if "@" in email and ".com" in email:
+    
+            limpar_tela()
+            
+            print('')
+            email2 = input("Agora confirme seu e-mail:  ")
+            
+            limpar_tela()
+        
+            if email == email2:
+                print('')
+                print('Seu e-mail foi cadastrado com sucesso')
+                guardar_dados('E-mail', email, dados_usuario)
+                reg_senha(dados_usuario)
+            else:
+                print('')
+                print('Os e-mails digitados são diferentes')
+                reg_email(dados_usuario)
+    else:
+        limpar_tela()
+
+        print('O E-mail digitado é inválido certifique-se que ele está correto')
+        reg_email(dados_usuario)
+
+def reg_senha(dados_usuario): #Recebe e verifica senha
+    
+    print('')
+    senha = input("Por favor crie uma senha:  ")
+    
+    limpar_tela()
+    
+    print('')
+    senha2 = input("Agora confirme sua senha:  ")
+    
+    limpar_tela()
+    
+    if senha == senha2:
+        print('')
+        print('Sua senha foi registrada com sucesso')
+        guardar_dados('Senha', senha, dados_usuario)
+        salvar_dados_arquivo('cadastro_usuario.json', dados_usuario)
+        logar(dados_usuario)
+    else:
+        limpar_tela()
+        
+        print('')
+        print('As senhas digitadas são diferentes')
+        reg_senha(dados_usuario)
+  
+def logar(dados_usuario):
+    print('')
+    print('Gostaria de fazer o login?')
+    login = input("Sim, Nao? ")
+    if login.lower() == "sim":
+        limpar_tela()
+        manuseio_login(dados_usuario)
+    elif login.lower() == "nao":
+        limpar_tela()
+        print('')
+        print('Sem problemas, quando quiser, estaremos a disposição!')
+        print()
+        print('Você saiu do programa')
+        print()
+        exit()
+    else:
+        limpar_tela()
+        print('')
+        print("Para selecionar as opções digite Sim ou Nao")
+        logar(dados_usuario)
+                
+#Fim do Cadastro
+
+#Funções de menu
+
+def portal(dados_usuario): #Função Portal
     print('|//////////////////////////////////////////////////////////////////|')
     print('|------------------------| SALESFORCE |----------------------------|')
     print('|//////////////////////////////////////////////////////////////////|')
@@ -78,9 +278,9 @@ def portal(): #Função Portal
     #Input da Escolha (Step-2)
     #select = input('Digite o número do serviço:  ')
     #select = int(select)
-    select = validação('Digite o número do serviço: ')
+    select = validar_numero('Digite o número do serviço: ')
 
-    subprocess.run('cls', shell=True)
+    limpar_tela()
 
     #Filtro da Escolha (Step-2)
     if 1 <= select <= 13:
@@ -100,91 +300,15 @@ def portal(): #Função Portal
             "https://www.salesforce.com/br/services/overview/"
         ]
         print(opcoes[select - 1])
-        voltar()
+        voltar(dados_usuario)
     else:
         print('Para selecionar as opções, digite apenas o NÚMERO respectivo à opção')
-        portal()
+        portal(dados_usuario)
 
-def registro(): #Função Regsitrar
-    print()
-    email = input("Por favor indique seu e-mail:  ")
-    email2 = input("Agora confirme seu e-mail:  ")
+def manuseio_login(dados_usuario):
+    dados_usuario = checar_cadastro(dados_usuario)
+    if 'E-mail' not in dados_usuario:
+        intencao_cadastro(dados_usuario)
+    portal(dados_usuario)
 
-    email = str(email)
-    email2 = str(email2)
-    
-    subprocess.run('cls', shell=True)
-
-    if email2 == email:
-        print('Seu e-mail foi cadastrado com sucesso!')
-    
-        #Registro Senha (Step-1)
-        chave = input("Certo, agora digite sua senha:  ")
-        chave2 = input("Certo, agora confirme sua senha:  ")
-    
-        chave = str(chave)
-        chave2 = str(chave2)
-        
-        subprocess.run('cls', shell=True)
-
-        #Usuário termina de se Registrar
-        if chave2 == chave:
-            print('|/////////| Sucesso, você esta cadastrado na Salesforce! |/////////|')
-            print('|------------------------------------------------------------------|')
-            portal()
-            
-        else:
-            print('As senhas digitadas são diferentes!')
-            registro()
-
-    else:
-        print('Os e-mails digitados são diferentes!')
-        registro()
-        
-def menu(): #Função Menu  
-    print('|/////////////////////////|  SALESFORCE  |/////////////////////////|')
-    print('|/////////////|  Você já é um usuário Salesforce?  |///////////////|')
-
-    possui_cadastro = input("Sim, Nao:   ")
-    possui_cadastro = str(possui_cadastro)
-    
-    subprocess.run('cls', shell=True)
-    
-    if possui_cadastro.lower() == "sim":  #Usuário Cadastrado (Step-1)
-        user = input("Seja bem vindo. Por favor indique seu e-mail:  ")
-        senha = input("Certo, agora digite sua senha:  ")
-        user = str(user)
-        senha = str(senha)
-        
-        subprocess.run('cls', shell=True)
-    
-        portal()
-
-    elif possui_cadastro.lower() == "nao":  #Usuário não Cadastrado (Step-1)
-        print("Será necessário fazer seu cadastro, você concorda em se cadastrar?")
-        intenção = input("Sim, Nao?   ")
-        intenção = str(intenção)
-        
-        subprocess.run('cls', shell=True)
-        
-        if intenção.lower() == "sim":
-            registro()
-        
-        elif intenção.lower() == "nao":
-            subprocess.run('cls', shell=True)
-            print('Sem problemas, quando quiser, estaremos a disposição!')
-            print()
-            print('Você saiu do programa')
-            print()
-            exit()
-            
-        else:
-            print("Para selecionar as opções digite Sim ou Nao")
-            menu()
-
-    else: #Usuário digitou errado (Step-1)
-        subprocess.run('cls', shell=True)
-        print("Para selecionar as opções digite Sim ou Nao")
-        menu()
-
-menu()
+manuseio_login({})
