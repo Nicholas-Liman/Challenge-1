@@ -39,7 +39,7 @@ def voltar(dados_usuario): #Função voltar
         print('|------------------------------------------------------|')
         voltar(dados_usuario)
 
-def sair():
+def sair(): #Função para fechar o programa
     print('\n|------------------------------------------------------|')
     print('|                                                      |')
     print('| Sem problemas, quando quiser estaremos a disposição  |')
@@ -49,7 +49,7 @@ def sair():
     print('|------------------------------------------------------|')
     exit()
 
-def deletar_registro(nome_arquivo, email):
+def deletar_registro(nome_arquivo, email): #Função que apagar o registro do user
     try:
         with open(nome_arquivo, 'r') as arquivo_existente:
             dados_existente = json.load(arquivo_existente)
@@ -72,7 +72,7 @@ def deletar_registro(nome_arquivo, email):
         print('|                                                      |')
         print('|------------------------------------------------------|')
 
-def deletar_conta(dados_usuario):
+def deletar_conta(dados_usuario): #Status de apagar registro
     if 'E-mail' in dados_usuario:
         email = dados_usuario['E-mail']
         deletar_registro('cadastro_usuario.json', email)
@@ -102,7 +102,7 @@ def validar_numero(mensagem): #Confirma que so existam numeros em inputs numerai
             print('|                                                      |')
             print('|------------------------------------------------------|')
 
-def validar_email(email):
+def validar_email(email): #Valida se o e-mail é valido
     # Expressão regular para validar o formato do e-mail
     regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 
@@ -111,7 +111,7 @@ def validar_email(email):
     else:
         return False
 
-def validar_senha(senha):
+def validar_senha(senha): #valida se a senha segue as regras
     # Expressão regular para validar a senha
     regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
 
@@ -159,7 +159,7 @@ def guardar_dados(nome_funcao, retorno, dados_usuario): #Manipula os dados para 
     dados_usuario[nome_funcao] = retorno
 
 #Funções de Cadastro
-def checar_cadastro(dados_usuario):
+def checar_cadastro(dados_usuario): #Verifica se o usuário é cadastrado
     print('\n|------------------------------------------------------|')
     print('|                  |  SALESFORCE  |                    |')
     print('|                                                      |')
@@ -361,7 +361,7 @@ def reg_senha(dados_usuario): #Recebe e verifica senha
         print('|------------------------------------------------------|')
         reg_senha(dados_usuario)
 
-def logar(dados_usuario):
+def logar(dados_usuario): #Valida se o user quer logar após se registrar
     limpar_tela()
     print('\n|------------------------------------------------------|')
     print('|                                                      |')
@@ -469,7 +469,7 @@ def portal(dados_usuario): #Função Portal
         print('|------------------------------------------------------|')
         portal(dados_usuario)
 
-def manuseio_login(dados_usuario):
+def manuseio_login(dados_usuario): #Função Main
     dados_usuario = checar_cadastro(dados_usuario)
     if 'E-mail' not in dados_usuario:
         intencao_cadastro(dados_usuario)
