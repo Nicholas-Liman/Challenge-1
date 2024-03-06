@@ -78,7 +78,7 @@ def deletar_conta(dados_usuario): #Status de apagar registro
         deletar_registro('cadastro_usuario.json', email)
         print('\n|------------------------------------------------------|')
         print('|                                                      |')
-        print('|      |Sua conta foi deletada com sucesso.|            ')
+        print('|      |Sua conta foi deletada com sucesso.|           |')
         print('|                                                      |')
         print('|------------------------------------------------------|')
         sair()
@@ -89,7 +89,7 @@ def deletar_conta(dados_usuario): #Status de apagar registro
         print('|                                                      |')
         print('|------------------------------------------------------|')
 
-def validar_numero(mensagem): #Confirma que so existam numeros em inputs numerais
+def validar_numero(mensagem): #Confirma que so existam numeros nos inputs
     while True:
         try:
             entrada = int(input(mensagem))
