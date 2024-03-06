@@ -111,6 +111,15 @@ def validar_email(email):
     else:
         return False
 
+def validar_senha(senha):
+    # Expressão regular para validar a senha
+    regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+
+    if re.match(regex, senha):
+        return True
+    else:
+        return False
+
 #Funções de Arquivo
 def salvar_dados_arquivo(nome_arquivo, dados): #Salva os dados em Json
     try:
@@ -304,8 +313,15 @@ def reg_senha(dados_usuario): #Recebe e verifica senha
     print('|                                                      |')
     print('|         |Agora só falta escolher uma senha|          |')
     print('|                                                      |')
+    print('|  |Tenha em mente que a senha precisa ter pelo menos| |')
+    print('|                                                      |')
+    print('|  |* Uma letra maiúscula. |                           |')
+    print('|  |* Uma letra minúscula. |                           |')
+    print('|  |* Um carácter especial.|                           |')
+    print('|  |* Um número.           |                           |')
+    print('|                                                      |')
     print('|------------------------------------------------------|')
-    senha = input('\nQual sua senha: ')
+    senha = input('\nSenha: ')
     senha = str(senha)
     
     limpar_tela()
@@ -317,25 +333,34 @@ def reg_senha(dados_usuario): #Recebe e verifica senha
     senha2 = input('\nRepita sua senha: ')
     senha2 = str(senha2)
     
-    if senha == senha2:
-        limpar_tela()
-        print('\n|------------------------------------------------------|')
-        print('|                                                      |')
-        print('|       |Perfeito senha registrada com sucesso|        |')
-        print('|                                                      |')
-        print('|------------------------------------------------------|')
-        guardar_dados('Senha', senha, dados_usuario)
-        salvar_dados_arquivo('cadastro_usuario.json', dados_usuario)
-        logar(dados_usuario)
+    if validar_senha(senha):
+        if senha == senha2:
+            limpar_tela()
+            print('\n|------------------------------------------------------|')
+            print('|                                                      |')
+            print('|       |Perfeito senha registrada com sucesso|        |')
+            print('|                                                      |')
+            print('|------------------------------------------------------|')
+            guardar_dados('Senha', senha, dados_usuario)
+            salvar_dados_arquivo('cadastro_usuario.json', dados_usuario)
+            logar(dados_usuario)
+        else:
+            limpar_tela()
+            print('\n|------------------------------------------------------|')
+            print('|                                                      |')
+            print('|          |Ops, as senhas eram diferentes|            |')
+            print('|                                                      |')
+            print('|------------------------------------------------------|')
+            reg_senha(dados_usuario)
     else:
         limpar_tela()
         print('\n|------------------------------------------------------|')
         print('|                                                      |')
-        print('|          |Ops, as senhas eram diferentes|            |')
+        print('|    |A senha não atende aos critérios mínimos.|       |')
         print('|                                                      |')
         print('|------------------------------------------------------|')
         reg_senha(dados_usuario)
-  
+
 def logar(dados_usuario):
     limpar_tela()
     print('\n|------------------------------------------------------|')
