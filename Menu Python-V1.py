@@ -74,8 +74,12 @@ def deletar_registro(nome_arquivo, email): #Função que apagar o registro do us
 
 def deletar_conta(dados_usuario): #Status de apagar registro
     if 'E-mail' in dados_usuario:
+        
         email = dados_usuario['E-mail']
         deletar_registro('cadastro_usuario.json', email)
+
+        limpar_tela()
+
         print('\n|------------------------------------------------------|')
         print('|                                                      |')
         print('|      |Sua conta foi deletada com sucesso.|           |')
@@ -123,7 +127,7 @@ def validar_senha(senha): #valida se a senha segue as regras
 #Funções de Arquivo
 def salvar_dados_arquivo(nome_arquivo, dados): #Salva os dados em Json
     try:
-        with open(nome_arquivo, 'r') as arquivo_existente:
+        with open(nome_arquivo, 'w') as arquivo_existente:
             dados_existente = json.load(arquivo_existente)
     except FileNotFoundError:
         dados_existente = {}
@@ -139,7 +143,7 @@ def salvar_dados_arquivo(nome_arquivo, dados): #Salva os dados em Json
             print('|------------------------------------------------------|')
         else:
             dados_existente[email] = dados
-            with open(nome_arquivo, 'w') as arquivo:
+            with open(nome_arquivo, 'r') as arquivo:
                 json.dump(dados_existente, arquivo, indent=2)
                 print('\n|------------------------------------------------------|')
                 print('|                                                      |')
@@ -315,6 +319,7 @@ def reg_senha(dados_usuario): #Recebe e verifica senha
     print('|                                                      |')
     print('|  |Tenha em mente que a senha precisa ter pelo menos| |')
     print('|                                                      |')
+    print('|  |* Oito carácteres. |                               |')
     print('|  |* Uma letra maiúscula. |                           |')
     print('|  |* Uma letra minúscula. |                           |')
     print('|  |* Um carácter especial.|                           |')
@@ -341,9 +346,11 @@ def reg_senha(dados_usuario): #Recebe e verifica senha
             print('|       |Perfeito senha registrada com sucesso|        |')
             print('|                                                      |')
             print('|------------------------------------------------------|')
+            
             guardar_dados('Senha', senha, dados_usuario)
             salvar_dados_arquivo('cadastro_usuario.json', dados_usuario)
             logar(dados_usuario)
+
         else:
             limpar_tela()
             print('\n|------------------------------------------------------|')
@@ -439,8 +446,26 @@ def portal(dados_usuario): #Função Portal
 
     #Filtro da Escolha (Step-2)
     if 1 <= select <= 14:
+        
         if select == 14:
-            deletar_conta(dados_usuario)
+            limpar_tela()
+            print('\n|------------------------------------------------------|')
+            print('|                                                      |')
+            print('|   Você tem certeza que deseja deletar seu usuário?   |')
+            print('|                                                      |')
+            print('| Caso SIM.                                 Digite [1] |')
+            print('|                                                      |')
+            print('| Caso NÃO.                                 Digite [2] |')
+            print('|                                                      |')
+            print('|------------------------------------------------------|')
+                    
+            apaga = validar_numero('\nQual sua decisão? ')
+
+            if apaga == 1:
+                deletar_conta(dados_usuario)
+            
+            else:
+                voltar(dados_usuario)
             
         else:
             opcoes = [
