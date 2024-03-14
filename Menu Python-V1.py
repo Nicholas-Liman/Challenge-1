@@ -85,7 +85,8 @@ def deletar_conta(dados_usuario): #Status de apagar registro
         print('|      |Sua conta foi deletada com sucesso.|           |')
         print('|                                                      |')
         print('|------------------------------------------------------|')
-        sair()
+        checar_cadastro(dados_usuario)
+
     else:
         print('\n|------------------------------------------------------|')
         print('|                                                      |')
@@ -127,7 +128,7 @@ def validar_senha(senha): #valida se a senha segue as regras
 #Funções de Arquivo
 def salvar_dados_arquivo(nome_arquivo, dados): #Salva os dados em Json
     try:
-        with open(nome_arquivo, 'w') as arquivo_existente:
+        with open(nome_arquivo, 'r') as arquivo_existente:
             dados_existente = json.load(arquivo_existente)
     except FileNotFoundError:
         dados_existente = {}
@@ -143,13 +144,8 @@ def salvar_dados_arquivo(nome_arquivo, dados): #Salva os dados em Json
             print('|------------------------------------------------------|')
         else:
             dados_existente[email] = dados
-            with open(nome_arquivo, 'r') as arquivo:
+            with open(nome_arquivo, 'w') as arquivo:
                 json.dump(dados_existente, arquivo, indent=2)
-                print('\n|------------------------------------------------------|')
-                print('|                                                      |')
-                print(f'|    |O e-mail {email} foi cadastrado com sucesso.|    ')
-                print('|                                                      |')
-                print('|------------------------------------------------------|')
 
 def ler_dados(nome_arquivo): #Lê o json
     try:
@@ -174,7 +170,7 @@ def checar_cadastro(dados_usuario): #Verifica se o usuário é cadastrado
     print('| Caso não seja.                            Digite [2] |')
     print('|                                                      |')
     print('|------------------------------------------------------|')
-    
+
     possui_cadastro = validar_numero('\nÉ cadastrado? ')
 
     if possui_cadastro == 1:
@@ -237,7 +233,6 @@ def checar_cadastro(dados_usuario): #Verifica se o usuário é cadastrado
         return checar_cadastro(dados_usuario)
 
 def intencao_cadastro(dados_usuario): #Verifica se o usuario quer se cadastrar
-    limpar_tela()
     print('\n|------------------------------------------------------|')
     print('|                                                      |')
     print('|            |  Gostaria de se cadastrar?  |           |')
@@ -277,32 +272,32 @@ def reg_email(dados_usuario): #Recebe e verifica email
     email = input('\nPor favor, indique seu e-mail: ')
 
     if validar_email(email):
+        limpar_tela()
+        print('\n|------------------------------------------------------|')
+        print('|                                                      |')
+        print('|         |Agora é só repetir o mesmo e-mail|          |')
+        print('|                                                      |')
+        print('|------------------------------------------------------|')
+        email2 = input('\nConfirme seu e-mail:  ')
+        
+    
+        if email == email2:
+            limpar_tela()
+            print('\n-----------------------------------------------------------')
+            print('|                                                      ')
+            print('|       |Maravilha, seu e-mail foi registrado|         ')
+            print('|                                                      ')
+            print('|------------------------------------------------------')
+            guardar_dados('E-mail', email, dados_usuario)
+            reg_senha(dados_usuario)
+        else:
             limpar_tela()
             print('\n|------------------------------------------------------|')
             print('|                                                      |')
-            print('|         |Agora é só repetir o mesmo e-mail|          |')
+            print('|     |Ops, parece que os e-mais eram diferentes|      |')
             print('|                                                      |')
             print('|------------------------------------------------------|')
-            email2 = input('\nConfirme seu e-mail:  ')
-            
-        
-            if email == email2:
-                limpar_tela()
-                print('\n|------------------------------------------------------|')
-                print('|                                                      |')
-                print('|       |Maravilha, seu e-mail foi registrado|         |')
-                print('|                                                      |')
-                print('|------------------------------------------------------|')
-                guardar_dados('E-mail', email, dados_usuario)
-                reg_senha(dados_usuario)
-            else:
-                limpar_tela()
-                print('\n|------------------------------------------------------|')
-                print('|                                                      |')
-                print('|     |Ops, parece que os e-mais eram diferentes|      |')
-                print('|                                                      |')
-                print('|------------------------------------------------------|')
-                reg_email(dados_usuario)
+            reg_email(dados_usuario)
     else:
         limpar_tela()
         print('\n|------------------------------------------------------|')
@@ -369,7 +364,6 @@ def reg_senha(dados_usuario): #Recebe e verifica senha
         reg_senha(dados_usuario)
 
 def logar(dados_usuario): #Valida se o user quer logar após se registrar
-    limpar_tela()
     print('\n|------------------------------------------------------|')
     print('|                                                      |')
     print('| Caso deseje fazer LOGIN.                  Digite [1] |')
@@ -446,7 +440,6 @@ def portal(dados_usuario): #Função Portal
 
     #Filtro da Escolha (Step-2)
     if 1 <= select <= 14:
-        
         if select == 14:
             limpar_tela()
             print('\n|------------------------------------------------------|')
@@ -501,3 +494,4 @@ def manuseio_login(dados_usuario): #Função Main
     portal(dados_usuario)
 
 manuseio_login({})
+
