@@ -401,46 +401,99 @@ def portal(dados_usuario): #Função Portal
     print('|                                                       |')
     print('| Para selecionar digite o número respectivo ao serviço |')
     print('|_______________________________________________________|')
-    print('|(1)| - CUSTOMER 360                         |//////////|')
     print('|                                                       |')
-    print('|(2)| - VENDAS                               |//////////|')
+    print('|(1)| - Trail Finder                         |//////////|')
     print('|                                                       |')
-    print('|(3)| - Atendimento ao Cliente               |//////////|')
+    print('|(2)| - Customer 360                         |//////////|')
     print('|                                                       |')
-    print('|(4)| - Marketing                            |//////////|')
+    print('|(3)| - Vendas                               |//////////|')
     print('|                                                       |')
-    print('|(5)| - Commerce                             |//////////|')
+    print('|(4)| - Atendimento ao Cliente               |//////////|')
     print('|                                                       |')
-    print('|(6)| - Data Cloud                           |//////////|')
+    print('|(5)| - Marketing                            |//////////|')
     print('|                                                       |')
-    print('|(7)| - Tableau                              |//////////|')
+    print('|(6)| - Commerce                             |//////////|')
     print('|                                                       |')
-    print('|(8)| - Mulesoft                             |//////////|')
+    print('|(7)| - Data Cloud                           |//////////|')
     print('|                                                       |')
-    print('|(9)| - Slack                                |//////////|')
+    print('|(8)| - Tableau                              |//////////|')
     print('|                                                       |')
-    print('|(10)| - Sustentabilidade                    |//////////|')
+    print('|(9)| - Mulesoft                             |//////////|')
     print('|                                                       |')
-    print('|(11)| - Pequenas Empresas                   |//////////|')
+    print('|(10)| - Slack                               |//////////|')
     print('|                                                       |')
-    print('|(12)| - Especialistas & Apps de parceiros   |//////////|')
+    print('|(11)| - Sustentabilidade                    |//////////|')
     print('|                                                       |')
-    print('|(13)| - Serviços e Planos                   |//////////|')
+    print('|(12)| - Pequenas Empresas                   |//////////|')
     print('|                                                       |')
-    print('|(14)| - Excluir conta                       |//////////|')
+    print('|(13)| - Especialistas & Apps de parceiros   |//////////|')
+    print('|                                                       |')
+    print('|(14)| - Serviços e Planos                   |//////////|')
+    print('|                                                       |')
+    print('|(15)| - Excluir conta                       |//////////|')
     print('|-------------------------------------------------------|')
     
-
-    #Input da Escolha (Step-2)
-    #select = input('Digite o número do serviço:  ')
-    #select = int(select)
     select = validar_numero('\nServiço desejado: ')
 
     limpar_tela()
 
     #Filtro da Escolha (Step-2)
-    if 1 <= select <= 14:
-        if select == 14:
+    if 1 <= select <= 15:
+        if select == 1:
+            limpar_tela()
+            print('\n|------------------------------------------------------|')
+            print('|                                                      |')
+            print('|             | Bem vindo ao TRAIL FINDER |            |')
+            print('|                                                      |')
+            print('|           Para testar selecione a indústria          |')
+            print('|                                                      |')
+            print('| Saúde                                     Digite [1] |')
+            print('|                                                      |')
+            print('| Energia                                   Digite [2] |')
+            print('|                                                      |')
+            print('| Logistíca                                 Digite [3] |')
+            print('|                                                      |')
+            print('| Comunicações                              Digite [4] |')
+            print('|                                                      |')
+            print('| Outras opções virão no futuro!                       |')
+            print('|                                                      |')
+            print('|------------------------------------------------------|')
+                    
+            ind = validar_numero('\nQual sua decisão? ')
+
+            if ind == 1:
+                limpar_tela()
+                print("\nTrail Finder é a solução que nós da A.M.R. queremos implementar, ela visa acelerar a interação de novos e velhos clientes.")
+                print("Diminuindo a quantia de cliques necessários para chegar em sua página de objetivo a partir da homepage.")
+                print("\nhttps://www.salesforce.com/br/solutions/industries/healthcare/overview/")
+                
+                voltar(dados_usuario)
+            
+            elif ind ==2:
+                limpar_tela()
+                print("\nTrail Finder é a solução que nós da A.M.R. queremos implementar, ela visa acelerar a interação de novos e velhos clientes.")
+                print("Diminuindo a quantia de cliques necessários para chegar em sua página de objetivo a partir da homepage.")
+                print("https://www.salesforce.com/solutions/industries/energy/overview/")
+                
+                voltar(dados_usuario)
+                
+            elif ind ==3:
+                limpar_tela()
+                print("\nTrail Finder é a solução que nós da A.M.R. queremos implementar, ela visa acelerar a interação de novos e velhos clientes.")
+                print("Diminuindo a quantia de cliques necessários para chegar em sua página de objetivo a partir da homepage.")
+                print("https://www.salesforce.com/solutions/industries/retail/overview/")
+                
+                voltar(dados_usuario)
+                
+            else:
+                limpar_tela()
+                print("\nTrail Finder é a solução que nós da A.M.R. queremos implementar, ela visa acelerar a interação de novos e velhos clientes.")
+                print("Diminuindo a quantia de cliques necessários para chegar em sua página de objetivo a partir da homepage.")
+                print("https://www.salesforce.com/solutions/industries/communications/overview/")
+                
+                voltar(dados_usuario)
+        
+        if select == 15:
             limpar_tela()
             print('\n|------------------------------------------------------|')
             print('|                                                      |')
